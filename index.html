@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#100508">
+<title>THE LAST SCREAM — Halloween 2026</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#f8e8e8;background:#100508}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 15%,#4a0a19 0%,#18070d 45%,#070407 100%)}main{width:min(900px,94%);margin:auto;padding:30px 0 65px}.center{text-align:center}.skull{font-size:65px;filter:drop-shadow(0 0 20px #e22)}h1{font-size:clamp(2.3rem,9vw,5rem);margin:6px 0;color:#ef3548;letter-spacing:.08em;text-shadow:0 0 22px #8b091e;line-height:1}h2{color:#ff6070}p{line-height:1.5}.muted{color:#c9aab0}.panel{background:#170c12de;border:1px solid #6a1b2a;border-radius:20px;padding:clamp(18px,4vw,36px);box-shadow:0 15px 50px #0009;margin:25px auto}.entry{max-width:480px}input,textarea,button{font:inherit;border-radius:10px;padding:14px;width:100%}input,textarea{background:#260f19;border:1px solid #9b3b4b;color:white}button{background:#af192f;color:white;border:0;font-weight:850;cursor:pointer;margin-top:10px}button:hover{background:#e62b46}button.secondary{background:#37202b}.hidden{display:none!important}.error{color:#ff7386;min-height:24px}.nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.nav button{width:auto}.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.photo-grid figure{margin:0;background:#230f19;border-radius:12px;overflow:hidden}.photo-grid img{width:100%;aspect-ratio:4/3;object-fit:cover}.photo-grid figcaption{padding:10px}.photos-placeholder{padding:38px 12px;text-align:center;border:1px dashed #994354;border-radius:12px;color:#d0aeb7}.maplink{display:inline-block;background:#ab1b31;color:white;text-decoration:none;padding:14px 20px;border-radius:10px;font-weight:bold}.warning{font-size:.85rem;color:#cba8af}.jumpscare{position:fixed;inset:0;z-index:100;background:#050000;display:grid;place-items:center;color:#fa182c;font-size:clamp(110px,35vw,350px);animation:flash .18s infinite alternate;cursor:pointer}@keyframes flash{to{background:#860010;transform:scale(1.03)}}@media(prefers-reduced-motion:reduce){.jumpscare{animation:none}}
+</style>
+</head>
+<body><main>
+<header class="center"><div class="skull">💀</div><h1>THE LAST SCREAM</h1><p class="muted">⚰️ HALLOWEEN 2026 • DINO 🎃</p><p>La paura ha trovato casa.</p></header>
+<section class="panel entry" id="gate"><h2 class="center">ENTRA SE HAI CORAGGIO</h2><p class="center muted">Inserisci il codice che hai ricevuto con il QR.</p><form id="login"><input id="code" type="password" autocomplete="off" placeholder="Codice segreto" aria-label="Codice segreto" required><button>ENTRA NELL'INCUBO</button><p id="error" class="error" role="alert"></p></form></section>
+<section id="visitor" class="hidden"><div class="panel center"><h2>SEI ENTRATO NELL'INCUBO 👻</h2><p>Preparati a scoprire THE LAST SCREAM. Non fidarti delle ombre...</p><button id="scareButton">💀 SORPRENDIMI</button><button class="secondary" id="logout">Esci</button></div><section class="panel"><h2>🏚️ La casa infestata</h2><p id="description"></p></section><section class="panel"><h2>📸 Foto della casa</h2><div id="gallery" class="photo-grid"></div></section><section class="panel"><h2>🗺️ Dove si trova</h2><p>Strada di Tecc, 6967 Dino, Svizzera</p><a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Strada%20di%20Tecc%2C%206967%20Dino%2C%20Svizzera" target="_blank" rel="noopener">🎃 APRI GOOGLE MAPS</a></section></section>
+<section id="leo" class="hidden"><div class="panel"><h2>🎃 Area Leo</h2><p>Da qui puoi modificare descrizione e foto. Questa versione salva le modifiche <strong>solo su questo dispositivo</strong>: per pubblicarle a tutti serve un archivio online con autenticazione.</p><label for="editDescription">Descrizione</label><textarea rows="5" id="editDescription"></textarea><button id="saveDescription">Salva descrizione</button><h2>📸 Aggiungi foto</h2><input id="photoInput" type="file" accept="image/*" multiple><p class="warning">Le foto sono salvate solo in questo browser, finché lo spazio disponibile lo permette.</p><div id="adminGallery" class="photo-grid"></div><button class="secondary" id="leoLogout">Esci</button></div></section>
+<footer class="center muted"><small>© 2026 THE LAST SCREAM • Halloween a Dino</small></footer>
+</main><div id="scare" class="jumpscare hidden" role="dialog" aria-label="Jumpscare" tabindex="-1">👹</div>
+<script>
+// ATTENZIONE: questo accesso client-side è una DEMO, NON protegge l'area Leo su un sito pubblico.
+// Configurare un backend con autenticazione prima di pubblicare un vero pannello per le foto.
+const VISITOR_CODE='💀🎃Halloween 2026 2.0';
+const LEO_DEMO_CODE='Leo🎃💀🎃admin';
+const $=id=>document.getElementById(id);
+const DEFAULT_DESCRIPTION='Una casa infestata dove le ombre prendono vita. Vieni a scoprire le decorazioni e i mostri di Halloween!';
+const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
+let description=read('tls_description',DEFAULT_DESCRIPTION), photos=read('tls_photos',[]);
+function show(id){['gate','visitor','leo'].forEach(s=>$(s).classList.toggle('hidden',s!==id));if(id==='visitor')renderVisitor();if(id==='leo')renderLeo()}
+$('login').addEventListener('submit',e=>{e.preventDefault();const code=$('code').value;if(code===VISITOR_CODE){show('visitor')}else if(code===LEO_DEMO_CODE){show('leo')}else{$('error').textContent='💀 Codice sbagliato!'}$('code').value=''});
+function renderVisitor(){$('description').textContent=description;$('gallery').innerHTML='';if(!photos.length){$('gallery').innerHTML='<div class="photos-placeholder">Le foto arriveranno presto... 👻</div>';return}for(const p of photos){const fig=document.createElement('figure');const img=document.createElement('img');img.src=p.url;img.alt=p.name;const cap=document.createElement('figcaption');cap.textContent=p.name;fig.append(img,cap);$('gallery').append(fig)}}
+function renderLeo(){$('editDescription').value=description;$('adminGallery').innerHTML='';for(const [i,p] of photos.entries()){const fig=document.createElement('figure');const img=document.createElement('img');img.src=p.url;img.alt=p.name;const cap=document.createElement('figcaption');const b=document.createElement('button');b.textContent='Rimuovi';b.onclick=()=>{photos.splice(i,1);persistPhotos();renderLeo()};cap.textContent=p.name;fig.append(img,cap,b);$('adminGallery').append(fig)}}
+function persistPhotos(){try{localStorage.setItem('tls_photos',JSON.stringify(photos))}catch{alert('Spazio esaurito: prova con foto più piccole.')}}
+$('saveDescription').onclick=()=>{description=$('editDescription').value;localStorage.setItem('tls_description',JSON.stringify(description));alert('Descrizione salvata su questo dispositivo!')};
+$('photoInput').onchange=async e=>{for(const f of [...e.target.files]){if(!f.type.startsWith('image/'))continue;const url=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f)});photos.push({name:f.name,url})}persistPhotos();renderLeo();e.target.value=''};
+$('logout').onclick=$('leoLogout').onclick=()=>show('gate');let scareTimer;
+function jump(){clearTimeout(scareTimer);$('scare').classList.remove('hidden');$('scare').focus();scareTimer=setTimeout(()=>$('scare').classList.add('hidden'),900)}
+$('scareButton').onclick=()=>{const delay=900+Math.random()*2500;setTimeout(jump,delay)};
+$('scare').onclick=()=>{$('scare').classList.add('hidden');clearTimeout(scareTimer)};
+$('scare').onkeydown=e=>{if(e.key==='Escape')$('scare').click()};
+</script></body></html>
