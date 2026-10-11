@@ -24,35 +24,30 @@
 const VISITOR_CODE='Halloween20262.0';
 const LEO_DEMO_CODE='Leoadmin';
 const $=id=>document.getElementById(id);
-const EVENT_START=new Date(2026,9,31,17,30,0);
-const EVENT_END=new Date(2026,9,31,19,20,0);
+// Orari in Svizzera (CET, UTC+1 il 31 ottobre 2026).
+const SITE_UNLOCK=new Date('2026-10-30T23:00:00Z'); // 31 ottobre, 00:00 a Dino
+const EVENT_START=new Date('2026-10-31T16:30:00Z'); // 17:30 locali
+const EVENT_END=new Date('2026-10-31T18:20:00Z'); // 19:20 locali
 function pad(n){return String(n).padStart(2,'0')}
 function updateCountdown(){
  const now=new Date();
- const diff=EVENT_START-now;
- if(diff>0){
-  const totalSeconds=Math.floor(diff/1000);
-  const days=Math.floor(totalSeconds/86400);
-  const hours=Math.floor((totalSeconds%86400)/3600);
-  const minutes=Math.floor((totalSeconds%3600)/60);
-  const seconds=totalSeconds%60;
-  $('cdDays').textContent=days;
-  $('cdHours').textContent=pad(hours);
-  $('cdMinutes').textContent=pad(minutes);
-  $('cdSeconds').textContent=pad(seconds);
-  $('countdownMessage').textContent='31 ottobre 2026 • dalle 17:30 alle 19:20';
+ const locked=now<SITE_UNLOCK;
+ $('countdown').classList.toggle('hidden',!locked);
+ $('gate').querySelector('.countdown-label').textContent=locked?'IL SITO SI APRIRÀ TRA':'HALLOWEEN 2026';
+ if(locked){
+  const secondsRemaining=Math.max(0,Math.ceil((SITE_UNLOCK-now)/1000));
+  $('cdDays').textContent=Math.floor(secondsRemaining/86400);
+  $('cdHours').textContent=pad(Math.floor((secondsRemaining%86400)/3600));
+  $('cdMinutes').textContent=pad(Math.floor((secondsRemaining%3600)/60));
+  $('cdSeconds').textContent=pad(secondsRemaining%60);
+  $('countdownMessage').textContent='31 OTTOBRE ALLE 00:00 • TORNA SE HAI IL CORAGGIO';
+  if(!$('visitor').classList.contains('hidden'))show('gate');
+ }else if(now<EVENT_START){
+  $('countdownMessage').textContent='L’INCUBO È COMINCIATO! • VISITE 17:30–19:20';
  }else if(now<=EVENT_END){
-  $('cdDays').textContent='00';
-  $('cdHours').textContent='00';
-  $('cdMinutes').textContent='00';
-  $('cdSeconds').textContent='00';
-  $('countdownMessage').textContent='THE LAST SCREAM È INIZIATO!';
+  $('countdownMessage').textContent='THE LAST SCREAM È APERTO! • FINO ALLE 19:20';
  }else{
-  $('cdDays').textContent='00';
-  $('cdHours').textContent='00';
-  $('cdMinutes').textContent='00';
-  $('cdSeconds').textContent='00';
-  $('countdownMessage').textContent='L’evento è terminato.';
+  $('countdownMessage').textContent='THE LAST SCREAM • EVENTO TERMINATO';
  }
 }
 const DEFAULT_DESCRIPTION='Una casa infestata dove le ombre prendono vita. Vieni a scoprire le decorazioni e i mostri di Halloween!';
@@ -81,7 +76,7 @@ async function loadPhotos(){
    localStorage.removeItem('tls_photos');
   }
   renderLeo();renderVisitor();status('Archivio pronto: '+photos.length+' foto salvate.');
- }catch(err){status('Impossibile usare l’archivio in questa anteprima. Apri il sito pubblicato in Safari.');}
+ }catch(err){status('Impossibile usare l’archivio. Apri il sito pubblicato in Safari.');}
 }
 async function savePhoto(photo){
  const db=await dbOpen();
@@ -96,7 +91,28 @@ updateCountdown();
 setInterval(updateCountdown,1000);
 loadPhotos();
 function show(id){['gate','visitor','leo'].forEach(s=>$(s).classList.toggle('hidden',s!==id));if(id==='visitor')renderVisitor();if(id==='leo')renderLeo()}
-$('login').addEventListener('submit',e=>{e.preventDefault();$('error').textContent='';const code=$('code').value.replace(/\s+/g,'').toLowerCase();if(code===VISITOR_CODE.toLowerCase()){show('visitor');sound('scare');setTimeout(jump,800);setTimeout(spawnMonster,2100)}else if(code===LEO_DEMO_CODE.toLowerCase()){show('leo')}else{$('error').textContent='Codice sbagliato.'}if(code===VISITOR_CODE.toLowerCase()||code===LEO_DEMO_CODE.toLowerCase())$('code').value=''});
+$('login').addEventListener('submit',e=>{
+ e.preventDefault();
+ $('error').textContent='';
+ const code=$('code').value.replace(/\s+/g,'').toLowerCase();
+ if(code===LEO_DEMO_CODE.toLowerCase()){
+  show('leo');
+  $('code').value='';
+ }else if(code===VISITOR_CODE.toLowerCase()){
+  if(Date.now()<SITE_UNLOCK.getTime()){
+   $('error').textContent='ASPETTA! Il sito si apre il 31 ottobre alle 00:00. Guarda il conto alla rovescia!';
+   updateCountdown();
+  }else{
+   show('visitor');
+   $('code').value='';
+   sound('scare');
+   setTimeout(jump,800);
+   setTimeout(spawnMonster,2100);
+  }
+ }else{
+  $('error').textContent='Codice sbagliato.';
+ }
+});
 function renderVisitor(){$('description').textContent=description;$('gallery').innerHTML='';if(!photos.length){$('gallery').innerHTML='<div class="photos-placeholder">Le foto arriveranno presto... </div>';return}for(const p of photos){const fig=document.createElement('figure');const img=document.createElement('img');img.src=p.url;img.alt=p.name;const cap=document.createElement('figcaption');cap.textContent=p.name;fig.append(img,cap);$('gallery').append(fig)}}
 function renderLeo(){$('editDescription').value=description;$('adminGallery').innerHTML='';for(const [i,p] of photos.entries()){const fig=document.createElement('figure');const img=document.createElement('img');img.src=p.url;img.alt=p.name;const cap=document.createElement('figcaption');const b=document.createElement('button');b.textContent='Rimuovi';b.onclick=async()=>{try{await deletePhoto(p.id);renderLeo();status('Foto eliminata.')}catch(e){status('Non è stato possibile eliminare la foto.')}};cap.textContent=p.name;fig.append(img,cap,b);$('adminGallery').append(fig)}}
 $('saveDescription').onclick=()=>{const next=$('editDescription').value;try{localStorage.setItem('tls_description',JSON.stringify(next));description=next;status('Descrizione salvata su questo dispositivo.')}catch(e){status('Errore: descrizione non salvata.')}};
