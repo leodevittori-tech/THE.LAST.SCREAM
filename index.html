@@ -1,146 +1,71 @@
-<!doctype html>
-<html lang="it">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#100508">
-<title>THE LAST SCREAM — Halloween 2026</title>
-<style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#f8e8e8;background:#100508}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 15%,#4a0a19 0%,#18070d 45%,#070407 100%)}main{width:min(900px,94%);margin:auto;padding:30px 0 65px}.center{text-align:center}.skull{font-size:65px;filter:drop-shadow(0 0 20px #e22)}h1{font-size:clamp(2.3rem,9vw,5rem);margin:6px 0;color:#ef3548;letter-spacing:.08em;text-shadow:0 0 22px #8b091e;line-height:1}h2{color:#ff6070}p{line-height:1.5}.muted{color:#c9aab0}.panel{background:#170c12de;border:1px solid #6a1b2a;border-radius:20px;padding:clamp(18px,4vw,36px);box-shadow:0 15px 50px #0009;margin:25px auto}.entry{max-width:480px}input,textarea,button{font:inherit;border-radius:10px;padding:14px;width:100%}input,textarea{background:#260f19;border:1px solid #9b3b4b;color:white}button{background:#af192f;color:white;border:0;font-weight:850;cursor:pointer;margin-top:10px}button:hover{background:#e62b46}button.secondary{background:#37202b}.hidden{display:none!important}.error{color:#ff7386;min-height:24px}.nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.nav button{width:auto}.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.photo-grid figure{margin:0;background:#230f19;border-radius:12px;overflow:hidden}.photo-grid img{width:100%;aspect-ratio:4/3;object-fit:cover}.photo-grid figcaption{padding:10px}.photos-placeholder{padding:38px 12px;text-align:center;border:1px dashed #994354;border-radius:12px;color:#d0aeb7}.maplink{display:inline-block;background:#ab1b31;color:white;text-decoration:none;padding:14px 20px;border-radius:10px;font-weight:bold}.warning{font-size:.85rem;color:#cba8af}.jumpscare{position:fixed;inset:0;z-index:100;background:#050000;display:grid;place-items:center;color:#fa182c;font-size:clamp(110px,35vw,350px);animation:flash .18s infinite alternate;cursor:pointer}@keyframes flash{to{background:#860010;transform:scale(1.03)}}@media(prefers-reduced-motion:reduce){.jumpscare{animation:none}}
-
-#monsterLayer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:20}.monster{position:absolute;top:var(--top);left:-150px;width:110px;height:140px;opacity:.78;animation:creep var(--duration) linear forwards;filter:drop-shadow(0 0 18px #b60822)}.monster:before{content:"";position:absolute;inset:5px 8px;background:#151317;border:3px solid #6d1428;border-radius:50% 50% 38% 42%;transform:rotate(-8deg)}.monster:after{content:"◉   ◉";position:absolute;left:22px;top:42px;font-size:29px;white-space:pre;color:#ff1535;text-shadow:0 0 12px red}.monster .mouth{position:absolute;left:31px;top:93px;width:49px;height:25px;border-radius:50%;background:#9c0114;z-index:1;box-shadow:inset 0 0 8px black}@keyframes creep{0%{transform:translateX(-20vw) rotate(-16deg)}45%{transform:translateX(55vw) rotate(14deg) scale(1.3)}100%{transform:translateX(130vw) rotate(-20deg)}}.jumpscare{font-size:clamp(80px,24vw,250px);text-align:center}.jumpscare .face{font-size:clamp(110px,30vw,320px);line-height:1;filter:drop-shadow(0 0 35px red)}@media(prefers-reduced-motion:reduce){.monster{animation:none;display:none}}
-.countdown-wrap{margin:18px 0 8px}.countdown-label{color:#ff9aa6;font-weight:700;letter-spacing:.04em;margin:0 0 10px}.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.countdown .box{background:#260f19;border:1px solid #9b3b4b;border-radius:14px;padding:12px 8px;text-align:center}.countdown .num{display:block;font-size:clamp(1.35rem,5vw,2rem);font-weight:900;color:#fff;text-shadow:0 0 14px #b40821}.countdown .lab{display:block;font-size:.76rem;color:#d7b0b7;letter-spacing:.06em;margin-top:4px}.countdown-message{margin:12px 0 0;color:#ffd2d7;min-height:24px}@media(max-width:520px){.countdown{grid-template-columns:repeat(2,1fr)}}
-</style>
-</head>
-<body><div id="monsterLayer" aria-hidden="true"></div><main>
-<header class="center"><div class="skull"></div><h1>THE LAST SCREAM</h1><p class="muted"> HALLOWEEN 2026 • DINO </p></header>
-<section class="panel entry" id="gate"><h2 class="center">ENTRA SE HAI CORAGGIO</h2><div class="countdown-wrap center"><p class="countdown-label">APERTURA TRA</p><div id="countdown" class="countdown" aria-live="polite"><div class="box"><span class="num" id="cdDays">--</span><span class="lab">GIORNI</span></div><div class="box"><span class="num" id="cdHours">--</span><span class="lab">ORE</span></div><div class="box"><span class="num" id="cdMinutes">--</span><span class="lab">MINUTI</span></div><div class="box"><span class="num" id="cdSeconds">--</span><span class="lab">SECONDI</span></div></div><p id="countdownMessage" class="countdown-message"></p></div><form id="login"><input id="code" type="text" autocapitalize="off" spellcheck="false" autocomplete="off" placeholder="Scrivi il codice qui" aria-label="Codice segreto" required><button>ENTRA</button><p id="error" class="error" role="alert"></p></form></section>
-<section id="visitor" class="hidden"><div class="panel center"><h2>SEI ENTRATO NELL'INCUBO </h2><button class="secondary" id="logout">Esci</button></div><section class="panel"><h2> La casa infestata</h2><p id="description"></p></section><section class="panel"><h2> Foto della casa</h2><div id="gallery" class="photo-grid"></div></section><section class="panel"><h2> Dove si trova</h2><p>Strada di Tecc, 6967 Dino, Svizzera</p><a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Strada%20di%20Tecc%2C%206967%20Dino%2C%20Svizzera" target="_blank" rel="noopener"> APRI GOOGLE MAPS</a></section></section>
-<section id="leo" class="hidden"><div class="panel"><h2> Area Leo</h2><p class="warning">Foto salvate solo in questo browser e dispositivo, non visibili agli altri visitatori online. Non usare la navigazione privata e non cancellare i dati del sito.</p><p id="saveStatus" class="warning" role="status"></p><label for="editDescription">Descrizione</label><textarea rows="5" id="editDescription"></textarea><button id="saveDescription">Salva descrizione</button><h2> Aggiungi foto</h2><input id="photoInput" type="file" accept="image/*" multiple><div id="adminGallery" class="photo-grid"></div><button class="secondary" id="leoLogout">Esci</button></div></section>
-<footer class="center muted"><small>© 2026 THE LAST SCREAM • Halloween a Dino</small></footer>
-</main><div id="scare" class="jumpscare hidden" role="dialog" aria-label="Jumpscare" tabindex="-1"><div class="face" aria-hidden="true">☠</div></div>
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#15060b"><title>THE LAST SCREAM — Dino</title><style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% 8%,#50101b,#17080e 48%,#080408);font:16px system-ui,-apple-system,sans-serif;color:#fcebef;min-height:100vh}main{width:min(600px,92%);margin:auto;padding:36px 0 60px}.center{text-align:center}h1{font-size:clamp(2.6rem,10vw,5rem);color:#ff344f;line-height:1.04;letter-spacing:.025em;text-shadow:0 0 28px #a90825;margin:10px 0}h2{color:#ff586b;font-size:1.4rem}.panel{padding:24px;border-radius:22px;background:#210e17e8;border:1px solid #6c2334;margin:24px 0;box-shadow:0 12px 35px #0008}.muted{color:#d0adb5}.event{color:#ffc1a0;font-weight:700}.btn{border:none;border-radius:12px;padding:16px;width:100%;background:#b41c35;color:#fff;font:800 1rem system-ui;cursor:pointer}.btn:disabled{opacity:.5}.btn.secondary{background:#4a2633}.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ffc582}input,textarea{width:100%;background:#110810;color:white;border:1px solid #8b4454;border-radius:12px;padding:14px;font:inherit}textarea{min-height:100px}.family{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;text-align:left}.family label{font-size:.92rem;color:#f0c1cb}.family input{margin-top:7px}.review-person{background:#301520;border:1px solid #6d3040;padding:15px;border-radius:15px;margin:14px 0}.review-person h3{margin:0 0 12px;color:#ffb5c0}.stars{display:flex;gap:7px;justify-content:center}.star{border:0;background:none;color:#78606a;font-size:2.6rem;padding:2px;cursor:pointer}.star.on{color:#ffc84e}.small{font-size:.85rem}.hide{display:none!important}.notice{color:#ffd0aa;min-height:24px}.danger{color:#ff8695}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{background:#311520;padding:18px;border-radius:14px;text-align:center}.stat strong{display:block;font-size:2rem}.comment{padding:13px;background:#301822;border-radius:12px;margin:9px 0;overflow-wrap:anywhere}.skull{font-size:4rem}.overlay{position:fixed;inset:0;display:grid;place-items:center;background:#180008;z-index:50;animation:flash .16s alternate 6}.overlay b{font-size:min(65vw,300px);color:#ff203d;filter:drop-shadow(0 0 25px red)}@keyframes flash{to{background:#870016}}#monsters{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}.monster{position:absolute;left:-100px;top:var(--y);font-size:65px;animation:floatby var(--t) linear forwards;filter:drop-shadow(0 0 15px #d30e2c)}@keyframes floatby{to{left:110%;transform:rotate(23deg)}}.audio-tip{font-size:.82rem;color:#ffcfad;margin-top:10px}.pulse{animation:pulse 2s infinite}@keyframes pulse{50%{transform:scale(1.04)}}@media(prefers-reduced-motion:reduce){.overlay,.monster,.pulse{animation:none}.monster{display:none}}
+.public-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.public-stat{background:#32141e;border:1px solid #813344;border-radius:16px;padding:18px 10px;text-align:center}.public-stat strong{display:block;font-size:2.15rem;color:#ffca78}.public-review{padding:15px;margin:12px 0;border-radius:14px;border:1px solid #703044;background:#321620;overflow-wrap:anywhere}.public-review .stars-public{color:#ffd166;font-size:1.25rem;letter-spacing:2px}.creepy-faces{display:flex;justify-content:center;gap:12px;font-size:3.4rem}.creepy-faces span{display:inline-block;animation:floatface 2.7s ease-in-out infinite alternate}.creepy-faces span:nth-child(2){animation-delay:-1.2s}.creepy-faces span:nth-child(3){animation-delay:-1.9s}@keyframes floatface{from{transform:translateY(5px) rotate(-12deg)}to{transform:translateY(-13px) rotate(12deg) scale(1.14)}}@media(prefers-reduced-motion:reduce){.creepy-faces span{animation:none}}</style></head><body><div id="monsters" aria-hidden="true"></div><main><header class="center"><div class="skull">☠</div><h1>THE LAST SCREAM</h1><p class="event">SABATO 31 OTTOBRE 2026 · 17:30–19:20</p><p class="muted">Dino · Strada di Tecc</p><div class="public-stats"><div class="public-stat"><strong id="publicCount">0</strong>VISITATORI ENTRATI</div><div class="public-stat"><strong id="publicAverage">—</strong>MEDIA STELLE</div></div><p class="small muted">I numeri mostrati qui sono registrati soltanto su questo dispositivo.</p></header>
+<section class="panel center"><h2>HAI IL CORAGGIO DI ENTRARE?</h2><p>Se sei davanti alla casa infestata, indica quante persone entrano con te.</p><div class="family"><label>Adulti <input id="adults" type="number" min="0" max="10" value="1" inputmode="numeric"></label><label>Bambini <input id="children" type="number" min="0" max="10" value="0" inputmode="numeric"></label></div><button id="enter" class="btn">SIAMO ENTRATI!</button><p id="enterStatus" class="notice" role="status"></p><p class="small muted">Una registrazione per dispositivo: indica quante persone entrano insieme.</p></section>
+<section class="panel center" id="horror"><h2>NON SEI SOLO...</h2><p>Le ombre ti stanno osservando.</p><div class="creepy-faces" aria-hidden="true"><span>👁️</span><span>👻</span><span>👁️</span></div><p class="muted">Tieni gli occhi aperti. I mostri potrebbero arrivare all'improvviso.</p><p class="audio-tip pulse">Tocca un pulsante per attivare la musichetta inquietante.</p><button id="survived" class="btn secondary">SONO SOPRAVVISSUTO</button></section>
+<section class="panel" id="reviews"><h2 class="center">QUANTO TI ABBIAMO SPAVENTATO?</h2><p class="center muted">Ogni adulto e ogni bambino scrive personalmente il proprio commento e sceglie le proprie stelle. Un solo invio per dispositivo. Non scrivere nomi o dati personali.</p><div id="reviewPeople"></div><button id="goEntry" class="btn secondary" style="margin:10px 0">REGISTRA IL GRUPPO PER VOTARE</button><button id="send" class="btn" style="margin-top:12px">INVIA TUTTE LE RECENSIONI</button><p id="reviewStatus" class="notice" role="status"></p></section>
+<section class="panel center"><h2>COME ARRIVARE</h2><p>Strada di Tecc, 6967 Dino</p><a class="btn" style="display:block;text-decoration:none" href="https://www.google.com/maps/search/?api=1&query=Strada%20di%20Tecc%2C%206967%20Dino%2C%20Svizzera" target="_blank" rel="noopener">APRI LA MAPPA</a></section>
+<section class="panel" id="publicReviews"><h2 class="center">RECENSIONI DEI SOPRAVVISSUTI</h2><p class="center muted">Voti e commenti lasciati sul dispositivo.</p><p id="publicReviewTotal" class="center event"></p><div id="publicReviewList"></div></section><footer class="panel"><p class="center small muted">© 2026 THE LAST SCREAM</p><p class="center small muted">ACCESSO SEGRETO</p><form id="secretForm"><input id="secret" type="password" placeholder="Inserisci il codice" autocomplete="off" aria-label="Codice segreto"><button class="btn secondary" style="margin-top:9px" type="submit">SBLOCCA</button></form><p id="secretStatus" class="notice"></p><div id="dashboard" class="hide"><h2>Statistiche</h2><div class="stats"><div class="stat"><strong id="count">0</strong>Persone registrate</div><div class="stat"><strong id="avg">—</strong>Media stelle</div></div><p id="groups" class="small muted"></p><h2>Commenti</h2><div id="comments"></div><button id="testMode" class="btn secondary" style="margin-top:12px">PROVA INGRESSO E RECENSIONI</button><button id="resetTest" class="btn secondary" style="margin-top:9px">AZZERA DATI DI PROVA</button><button id="closeAdmin" class="btn secondary" style="margin-top:9px">Chiudi statistiche</button></div></footer><p class="small muted center">ATTENZIONE: versione locale. I visitatori su altri telefoni non vedranno questi numeri o commenti. Per un contatore condiviso serve un servizio online.</p></main><div id="scare" class="overlay hide" aria-hidden="true"><b>☠</b></div>
 <script>
-// ATTENZIONE: questo accesso client-side è una DEMO, NON protegge l'area Leo su un sito pubblico.
-// Configurare un backend con autenticazione prima di pubblicare un vero pannello per le foto.
+const $=id=>document.getElementById(id);const KEY='tls-onepage-v1';const eventStart=Date.parse('2026-10-31T17:30:00+01:00');const eventEnd=Date.parse('2026-10-31T19:20:00+01:00');let data;try{data=JSON.parse(localStorage.getItem(KEY))||{entered:false,adults:0,children:0,reviews:[]}}catch{data={entered:false,adults:0,children:0,reviews:[]}}const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));return true}catch{return false}};let testMode=false;let personRatings=[];let audio,ambientTimer,monsterTimer,scareTimer,audioEnabled=false;const scareFaces=['☠','👹','💀','👁️'];
+function ensureAudio(){try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();audioEnabled=true;startAmbient();}catch{}}
+function playTone(type='sawtooth',f1=650,f2=60,dur=.56,peak=.16){if(!audioEnabled)return;try{const n=audio.currentTime;const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(f1,n);o.frequency.exponentialRampToValueAtTime(Math.max(20,f2),n+dur*.85);g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(peak,n+.05);g.gain.exponentialRampToValueAtTime(.0001,n+dur);o.connect(g).connect(audio.destination);o.start(n);o.stop(n+dur+.02)}catch{}}
+function startAmbient(){if(ambientTimer) return; ambientTimer=setInterval(()=>{if(document.visibilityState!=='visible')return; if(!audioEnabled)return; const base=110+Math.random()*65; playTone('triangle',base,base*.7,2.4,.03); setTimeout(()=>playTone('sine',base*1.5,base*1.1,1.8,.02),420); if(Math.random()<.32) setTimeout(()=>playTone('square',220+Math.random()*120,120,0.28,.02),1100);},4200)}
+function scare(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return; $('scare').querySelector('b').textContent=scareFaces[Math.floor(Math.random()*scareFaces.length)]; $('scare').classList.remove('hide'); ensureAudio(); playTone('sawtooth',700+Math.random()*180,55,0.62,.18); clearTimeout(scareTimer); scareTimer=setTimeout(()=>$('scare').classList.add('hide'),700)}
+function monster(){const m=document.createElement('span');m.className='monster';m.textContent=['👻','💀','👹','☠','🕷️'][Math.floor(Math.random()*5)];m.style.setProperty('--y',Math.floor(8+Math.random()*74)+'%');m.style.setProperty('--t',(4+Math.random()*4)+'s');$('monsters').append(m);setTimeout(()=>m.remove(),8200)}
+function monsterBurst(n=2){for(let i=0;i<n;i++)setTimeout(monster,i*600)}
+function scheduleMonsters(){if(monsterTimer)return; const loop=()=>{monsterBurst(1+Math.floor(Math.random()*2)); monsterTimer=setTimeout(loop,2800+Math.random()*2600)}; loop()}
+function scheduleRandomScares(){ const loop=()=>{ if(document.visibilityState==='visible' && Math.random()<.92) scare(); setTimeout(loop,12000+Math.random()*13000)}; loop()}
 
-const VISITOR_CODE='Halloween20262.0';
-const LEO_DEMO_CODE='Leoadmin';
-const $=id=>document.getElementById(id);
-// Orari in Svizzera (CET, UTC+1 il 31 ottobre 2026).
-const SITE_UNLOCK=new Date('2026-10-30T23:00:00Z'); // 31 ottobre, 00:00 a Dino
-const EVENT_START=new Date('2026-10-31T16:30:00Z'); // 17:30 locali
-const EVENT_END=new Date('2026-10-31T18:20:00Z'); // 19:20 locali
-function pad(n){return String(n).padStart(2,'0')}
-function updateCountdown(){
- const now=new Date();
- const locked=now<SITE_UNLOCK;
- $('countdown').classList.toggle('hidden',!locked);
- $('gate').querySelector('.countdown-label').textContent=locked?'IL SITO SI APRIRÀ TRA':'HALLOWEEN 2026';
- if(locked){
-  const secondsRemaining=Math.max(0,Math.ceil((SITE_UNLOCK-now)/1000));
-  $('cdDays').textContent=Math.floor(secondsRemaining/86400);
-  $('cdHours').textContent=pad(Math.floor((secondsRemaining%86400)/3600));
-  $('cdMinutes').textContent=pad(Math.floor((secondsRemaining%3600)/60));
-  $('cdSeconds').textContent=pad(secondsRemaining%60);
-  $('countdownMessage').textContent='31 OTTOBRE ALLE 00:00 • TORNA SE HAI IL CORAGGIO';
-  if(!$('visitor').classList.contains('hidden'))show('gate');
- }else if(now<EVENT_START){
-  $('countdownMessage').textContent='L’INCUBO È COMINCIATO! • VISITE 17:30–19:20';
- }else if(now<=EVENT_END){
-  $('countdownMessage').textContent='THE LAST SCREAM È APERTO! • FINO ALLE 19:20';
- }else{
-  $('countdownMessage').textContent='THE LAST SCREAM • EVENTO TERMINATO';
- }
-}
-const DEFAULT_DESCRIPTION='Una casa infestata dove le ombre prendono vita. Vieni a scoprire le decorazioni e i mostri di Halloween!';
-const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
-let description=read('tls_description',DEFAULT_DESCRIPTION), photos=[];
-const status=msg=>$('saveStatus').textContent=msg;
-let dbPromise;
-function dbOpen(){
- if(!('indexedDB' in window))return Promise.reject(Error('Archivio non disponibile'));
- if(!dbPromise)dbPromise=new Promise((resolve,reject)=>{
-  const req=indexedDB.open('TheLastScreamPhotos',1);
-  req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('photos'))req.result.createObjectStore('photos',{keyPath:'id'})};
-  req.onsuccess=()=>resolve(req.result);
-  req.onerror=()=>reject(req.error||Error('Impossibile aprire archivio'));
+function reviewCards(){
+ const container=$('reviewPeople');container.replaceChildren();personRatings=[];$('goEntry').classList.toggle('hide',!!data.entered);$('send').disabled=!data.entered||!!data.reviews.length;
+ if(!data.entered){container.textContent='Per lasciare le recensioni, torna in alto, scegli quanti adulti e bambini siete e premi SIAMO ENTRATI!';return}
+ const people=[...Array(Number(data.adults)||0)].map((_,i)=>({type:'Adulto',i})).concat([...Array(Number(data.children)||0)].map((_,i)=>({type:'Bambino',i})));
+ people.forEach((person,index)=>{
+  personRatings.push(0);
+  const wrap=document.createElement('div');wrap.className='review-person';
+  const title=document.createElement('h3');title.textContent=person.type+' '+(person.i+1);
+  const prompt=document.createElement('p');prompt.textContent=person.type==='Adulto'?'Com’è stata l’esperienza?':'Ti sei divertito? Quanto ti ha fatto paura?';
+  const stars=document.createElement('div');stars.className='stars';stars.setAttribute('aria-label','Voto '+person.type+' '+(person.i+1));
+  const buttons=[];for(let n=1;n<=5;n++){const btn=document.createElement('button');btn.type='button';btn.className='star';btn.textContent='★';btn.setAttribute('aria-label',n+' stelle');btn.onclick=()=>{personRatings[index]=n;buttons.forEach((b,i)=>b.classList.toggle('on',i<n))};buttons.push(btn);stars.append(btn)}
+  const label=document.createElement('label');label.textContent=person.type==='Adulto'?'Cosa ti è piaciuto? Cosa miglioreresti?':'Quale momento ti è piaciuto? Cosa cambieresti?';label.className='small muted';
+  const comment=document.createElement('textarea');comment.maxLength=500;comment.placeholder=person.type==='Adulto'?'Scrivi un suggerimento (facoltativo)':'Racconta cosa ti è piaciuto (facoltativo)';comment.dataset.person=index;label.append(comment);
+  wrap.append(title,prompt,stars,label);container.append(wrap);
  });
- return dbPromise;
 }
-async function loadPhotos(){
- try{
-  const db=await dbOpen();
-  photos=await new Promise((resolve,reject)=>{const tx=db.transaction('photos','readonly');const req=tx.objectStore('photos').getAll();req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});
-  // Recupera fotografie delle versioni precedenti, se presenti.
-  const old=read('tls_photos',[]);
-  if(old.length){
-   for(const photo of old){const id=crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());await savePhoto({id,name:photo.name,url:photo.url})}
-   localStorage.removeItem('tls_photos');
-  }
-  renderLeo();renderVisitor();status('Archivio pronto: '+photos.length+' foto salvate.');
- }catch(err){status('Impossibile usare l’archivio. Apri il sito pubblicato in Safari.');}
-}
-async function savePhoto(photo){
- const db=await dbOpen();
- await new Promise((resolve,reject)=>{const tx=db.transaction('photos','readwrite');tx.objectStore('photos').put(photo);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)});
- const i=photos.findIndex(p=>p.id===photo.id);if(i<0)photos.push(photo);else photos[i]=photo;
-}
-async function deletePhoto(id){
- const db=await dbOpen();await new Promise((resolve,reject)=>{const tx=db.transaction('photos','readwrite');tx.objectStore('photos').delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});
- photos=photos.filter(p=>p.id!==id);
-}
-updateCountdown();
-setInterval(updateCountdown,1000);
-loadPhotos();
-function show(id){['gate','visitor','leo'].forEach(s=>$(s).classList.toggle('hidden',s!==id));if(id==='visitor')renderVisitor();if(id==='leo')renderLeo()}
-$('login').addEventListener('submit',e=>{
- e.preventDefault();
- $('error').textContent='';
- const code=$('code').value.replace(/\s+/g,'').toLowerCase();
- if(code===LEO_DEMO_CODE.toLowerCase()){
-  show('leo');
-  $('code').value='';
- }else if(code===VISITOR_CODE.toLowerCase()){
-  if(Date.now()<SITE_UNLOCK.getTime()){
-   $('error').textContent='ASPETTA! Il sito si apre il 31 ottobre alle 00:00. Guarda il conto alla rovescia!';
-   updateCountdown();
-  }else{
-   show('visitor');
-   $('code').value='';
-   sound('scare');
-   setTimeout(jump,800);
-   setTimeout(spawnMonster,2100);
-  }
- }else{
-  $('error').textContent='Codice sbagliato.';
+function renderPublic(){
+ const total=data.entered?(Number(data.adults)||0)+(Number(data.children)||0):0;
+ $('publicCount').textContent=String(total);
+ const list=Array.isArray(data.reviews)?data.reviews:[];
+ $('publicAverage').textContent=list.length?(list.reduce((sum,r)=>sum+Number(r.rating||0),0)/list.length).toFixed(1)+' / 5':'—';
+ $('publicReviewTotal').textContent=list.length?list.length+' recensioni registrate':'Nessuna recensione ancora';
+ const container=$('publicReviewList');container.replaceChildren();
+ for(const r of list){
+  const card=document.createElement('article');card.className='public-review';
+  const title=document.createElement('strong');title.textContent=(r.type==='Bambino'?'Bambino':'Adulto')+' '+(Number(r.person)||1);
+  const stars=document.createElement('div');stars.className='stars-public';stars.textContent='★'.repeat(Math.min(5,Math.max(0,Number(r.rating)||0)))+'☆'.repeat(Math.max(0,5-(Number(r.rating)||0)));
+  const message=document.createElement('p');message.textContent=(r.comment||'Nessun commento').slice(0,500);
+  card.append(title,stars,message);container.append(card);
  }
-});
-function renderVisitor(){$('description').textContent=description;$('gallery').innerHTML='';if(!photos.length){$('gallery').innerHTML='<div class="photos-placeholder">Le foto arriveranno presto... </div>';return}for(const p of photos){const fig=document.createElement('figure');const img=document.createElement('img');img.src=p.url;img.alt=p.name;const cap=document.createElement('figcaption');cap.textContent=p.name;fig.append(img,cap);$('gallery').append(fig)}}
-function renderLeo(){$('editDescription').value=description;$('adminGallery').innerHTML='';for(const [i,p] of photos.entries()){const fig=document.createElement('figure');const img=document.createElement('img');img.src=p.url;img.alt=p.name;const cap=document.createElement('figcaption');const b=document.createElement('button');b.textContent='Rimuovi';b.onclick=async()=>{try{await deletePhoto(p.id);renderLeo();status('Foto eliminata.')}catch(e){status('Non è stato possibile eliminare la foto.')}};cap.textContent=p.name;fig.append(img,cap,b);$('adminGallery').append(fig)}}
-$('saveDescription').onclick=()=>{const next=$('editDescription').value;try{localStorage.setItem('tls_description',JSON.stringify(next));description=next;status('Descrizione salvata su questo dispositivo.')}catch(e){status('Errore: descrizione non salvata.')}};
-$('photoInput').onchange=async e=>{
- const files=[...e.target.files].filter(f=>f.type.startsWith('image/'));
- let saved=0;
- status('Salvataggio delle foto in corso...');
- for(const f of files){
-  try{
-   const url=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(f)});
-   await savePhoto({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random())),name:f.name,url});saved++;
-  }catch(err){status('Errore di salvataggio: '+saved+' foto salvate su '+files.length+'. Controlla lo spazio disponibile.');break}
- }
- if(saved===files.length)status(saved+' foto salvate correttamente su questo dispositivo!');
- renderLeo();e.target.value='';
+}
+function showEntry(){if(data.entered){$('enter').disabled=true;$('enterStatus').textContent='Gruppo già registrato su questo dispositivo ('+(Number(data.adults||0)+Number(data.children||0))+' persone).'}reviewCards();if(data.reviews.length){$('send').disabled=true;$('reviewStatus').textContent='I voti e i commenti sono già stati inviati da questo dispositivo: non è possibile inviarli di nuovo.';for(const el of document.querySelectorAll('#reviewPeople button, #reviewPeople textarea'))el.disabled=true;}}
+showEntry();renderPublic();
+$('goEntry').onclick=()=>document.querySelector('#enter').scrollIntoView({behavior:'smooth'});
+$('enter').onclick=()=>{ensureAudio();let now=Date.now();const adults=Number($('adults').value),children=Number($('children').value);if(!Number.isInteger(adults)||!Number.isInteger(children)||adults<0||children<0||adults+children<1||adults>10||children>10){$('enterStatus').textContent='Puoi inserire al massimo 10 adulti e 10 bambini (almeno una persona).';return}data.entered=true;data.adults=adults;data.children=children;if(!save()){$('enterStatus').textContent='Impossibile salvare su questo dispositivo.';return}showEntry();renderPublic();scare();monsterBurst(3);setTimeout(()=>$('reviews').scrollIntoView({behavior:'smooth'}),850)};
+$('survived').onclick=()=>{ensureAudio();$('reviews').scrollIntoView({behavior:'smooth'});};
+$('send').onclick=()=>{ensureAudio();
+ if(!data.entered){$('reviewStatus').textContent='Prima registra il tuo ingresso.';return}
+ if(data.reviews.length){$('reviewStatus').textContent='Hai già inviato i voti del gruppo da questo dispositivo.';return}
+ if(personRatings.some(v=>v<1)){$('reviewStatus').textContent='Seleziona le stelle per ogni adulto e bambino.';return}
+ const comments=[...document.querySelectorAll('#reviewPeople textarea')];
+ const reviews=personRatings.map((rating,i)=>({rating,comment:comments[i].value.trim().slice(0,500),type:i<Number(data.adults)?'Adulto':'Bambino',person:i<Number(data.adults)?i+1:i-Number(data.adults)+1}));
+ data.reviews=reviews;
+ if(!save()){data.reviews=[];$('reviewStatus').textContent='Impossibile salvare le recensioni.';return}
+ $('reviewStatus').textContent='Grazie! '+reviews.length+' voti registrati su questo dispositivo.';
+ $('send').disabled=true;renderPublic();scare();monsterBurst(2);
 };
-$('logout').onclick=$('leoLogout').onclick=()=>show('gate');let scareTimer;
-function jump(){sound('scare');clearTimeout(scareTimer);$('scare').classList.remove('hidden');$('scare').focus();scareTimer=setTimeout(()=>$('scare').classList.add('hidden'),900)}
-// Audio is only enabled after a user interaction, per mobile browser policy.
-let audioCtx;
-function sound(kind='scare'){
- try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();
- const now=audioCtx.currentTime;const oscillator=audioCtx.createOscillator();const gain=audioCtx.createGain();
- oscillator.type=kind==='scare'?'sawtooth':'triangle';oscillator.frequency.setValueAtTime(kind==='scare'?780:105,now);oscillator.frequency.exponentialRampToValueAtTime(kind==='scare'?50:62,now+.65);
- gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(kind==='scare'?.3:.045,now+.035);gain.gain.exponentialRampToValueAtTime(.0001,now+.7);oscillator.connect(gain).connect(audioCtx.destination);oscillator.start(now);oscillator.stop(now+.75)}catch(e){}
-}
-function spawnMonster(){if($('visitor').classList.contains('hidden'))return;const m=document.createElement('div');m.className='monster';m.style.setProperty('--top',(8+Math.random()*69)+'%');m.style.setProperty('--duration',(4+Math.random()*4)+'s');m.innerHTML='<span class="mouth"></span>';$('monsterLayer').append(m);setTimeout(()=>m.remove(),8500);if(Math.random()<.35)sound('ambient')}
-setInterval(spawnMonster,3900);
-$('scare').onclick=()=>{$('scare').classList.add('hidden');clearTimeout(scareTimer)};
-$('scare').onkeydown=e=>{if(e.key==='Escape')$('scare').click()};
+$('secretForm').onsubmit=e=>{e.preventDefault();ensureAudio();if($('secret').value.replace(/\s+/g,'').toLowerCase()!=='leoadmin'){$('secretStatus').textContent='Codice non riconosciuto.';return}$('secretStatus').textContent='Statistiche salvate solo su questo dispositivo. Per riprovare usa AZZERA DATI DI PROVA.';$('dashboard').classList.remove('hide');$('count').textContent=data.entered?String(Number(data.adults||0)+Number(data.children||0)):'0';$('groups').textContent=data.entered?'1 gruppo: '+Number(data.adults||0)+' adulti e '+Number(data.children||0)+' bambini.':'Nessun gruppo registrato.';$('avg').textContent=data.reviews.length?(data.reviews.reduce((a,b)=>a+b.rating,0)/data.reviews.length).toFixed(1):'—';$('comments').replaceChildren();for(const r of data.reviews){const c=document.createElement('div');c.className='comment';c.textContent=(r.type||'Visitatore')+' '+(r.person||'')+' · '+'★'.repeat(r.rating)+' — '+(r.comment||'Nessun commento');$('comments').append(c)}if(!data.reviews.length)$('comments').textContent='Nessun commento ancora.';$('secret').value=''};
+$('testMode').onclick=()=>{testMode=true;$('enterStatus').textContent='MODALITÀ PROVA: puoi registrare un gruppo e inviare voti di prova.';$('dashboard').classList.add('hide');document.querySelector('#enter').scrollIntoView({behavior:'smooth'});};
+$('resetTest').onclick=()=>{if(!confirm('Vuoi cancellare i dati di prova memorizzati su questo dispositivo?'))return;data={entered:false,adults:0,children:0,reviews:[]};if(!save()){ $('secretStatus').textContent='Non riesco ad azzerare i dati.';return;}testMode=true;$('enter').disabled=false;$('send').disabled=false;$('reviewStatus').textContent='Dati di prova azzerati.';$('enterStatus').textContent='Puoi provare di nuovo.';showEntry();$('dashboard').classList.add('hide');};
+$('closeAdmin').onclick=()=>$('dashboard').classList.add('hide');scheduleMonsters();scheduleRandomScares();document.addEventListener('click',ensureAudio,{once:true});
 </script></body></html>
